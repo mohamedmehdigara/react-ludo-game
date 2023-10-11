@@ -1,25 +1,82 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+// App.js
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import Player from './components/Player';
+import Token from './components/Token';
 
-function App() {
+const AppContainer = styled.div`
+  /* Add your app styles here */
+`;
+
+const  App = () => {
+  const [diceValue, setDiceValue] = useState(1);
+  const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
+
+  const players = [
+    {
+      name: 'Player 1',
+      color: 'red',
+      tokens: [
+        { id: 1, position: 0, playerId: 0 },
+        { id: 2, position: 0, playerId: 0 },
+      ],
+    },
+    {
+      name: 'Player 2',
+      color: 'blue',
+      tokens: [
+        { id: 3, position: 0, playerId: 1 },
+        { id: 4, position: 0, playerId: 1 },
+      
+    
+    
+  ]
+}]
+
+  const rollDice = () => {
+    const newValue = Math.floor(Math.random() * 6) + 1;
+    setDiceValue(newValue);
+
+    // Implement token movement logic and game rules here
+    // Update token positions and check for win conditions
+
+    // Switch to the next player's turn
+    const nextPlayerIndex = (currentPlayerIndex + 1) % players.length;
+    setCurrentPlayerIndex(nextPlayerIndex);
+  };
+
+  const moveToken = () => {
+    // Implement token movement logic based on the dice roll
+  };
+  const Dice = ({ value }) => {
+    return (
+      <div>
+        <h2>Dice: {value}</h2>
+      </div>
+    );
+  };
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppContainer>
+      <h1>Ludo Game</h1>
+      {players.map((player, index) => (
+        <Player
+          key={index}
+          name={player.name}
+          color={player.color}
+          tokens={player.tokens}
+          currentPlayer={index === currentPlayerIndex}
+          rollDice={rollDice}
+          moveToken={moveToken}
+        />
+      ))}
+      <div>
+        <Dice value={diceValue} />
+      </div>
+    </AppContainer>
   );
-}
+      
 
+}
 export default App;
