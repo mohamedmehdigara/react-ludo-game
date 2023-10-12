@@ -1,18 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 
 const DiceContainer = styled.div`
   /* Customize your dice container styles here */
   width: 100px;
   height: 100px;
-  background-color: #fff;
-  border: 2px solid #333;
+  background-color: ${({ backgroundColor }) => backgroundColor || '#fff'};
+  border: 2px solid ${({ borderColor }) => borderColor || '#333'};
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 24px;
-  cursor: pointer;
+  cursor: ${({ isRolling }) => (isRolling ? 'not-allowed' : 'pointer')};
   user-select: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 
   /* Apply the rolling animation if the dice is rolling */
   ${({ isRolling }) =>
@@ -30,29 +35,70 @@ const rollAnimation = keyframes`
   100% { transform: rotate(360deg); }
 `;
 
-const RollingDice = styled(DiceContainer)`
-  /* Additional styles for the rolling dice */
-  background: linear-gradient(to bottom, #fff, #ddd);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  transform-origin: center center;
-  border-color: transparent;
+const DiceFace = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
-const Dice = ({ value, isRolling, rollDice }) => {
+const DiceFaces = [
+  <DiceFace key="1">1</DiceFace>,
+  <DiceFace key="2">2</DiceFace>,
+  <DiceFace key="3">3</DiceFace>,
+  <DiceFace key="4">4</DiceFace>,
+  <DiceFace key="5">5</DiceFace>,
+  <DiceFace key="6">6</DiceFace>,
+];
+
+const Dice = ({ rollValue, isRolling, rollDice, backgroundColor, borderColor }) => {
+  // Use state to control the displayed face and simulate rolling animation
+  const [displayedFace, setDisplayedFace] = useState(1);
+
+  useEffect(() => {
+    if (isRolling) {
+      // Simulate rolling by changing the displayed face
+      let currentFace = 1;
+      const rollInterval = setInterval(() => {
+        setDisplayedFace(currentFace);
+        currentFace = (currentFace % 6) + 1;
+      }, 100);
+
+      // Stop rolling simulation after 1 second
+      setTimeout(() => {
+        clearInterval(rollInterval);
+        setDisplayedFace(rollValue);
+        rollDice();
+      }, 1000);
+    }
+  }, [isRolling, rollValue, rollDice]);
+
   const handleClick = () => {
     if (!isRolling) {
-      // Prevent rolling while the dice is already rolling
       rollDice();
     }
   };
 
   return (
-    <DiceContainer onClick={handleClick} isRolling={isRolling}>
-      {isRolling ? (
-        <RollingDice>{value}</RollingDice>
-      ) : (
-        value
-      )}
+    <DiceContainer
+      onClick={handleClick}
+      isRolling={isRolling}
+      backgroundColor={backgroundColor}
+      borderColor={borderColor}
+    >
+      {DiceFaces.map((face, index) => (
+        <DiceFace
+          key={index}
+          style={{ display: displayedFace === index + 1 ? 'block' : 'none' }}
+          aria-label={`Dice face ${index + 1}`}
+        >
+          {face}
+        </DiceFace>
+      ))}
     </DiceContainer>
   );
 };

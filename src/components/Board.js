@@ -34,31 +34,45 @@ const Token = styled.div`
   font-size: 14px;
 `;
 
+const CenterCircle = styled(Square)`
+  /* Customize center circle styles here */
+  background-color: #ccc;
+  border-radius: 50%;
+`;
+
+const Path = styled(Square)`
+  /* Customize path styles here */
+  background-color: #e0e0e0;
+`;
+
+const WinningZone = styled(Square)`
+  /* Customize winning zone styles here */
+  background-color: #ffeb3b;
+`;
+
 const Board = ({ players, customColors }) => {
-  const boardLayout = Array(11)
-    .fill(null)
-    .map((_, row) =>
-      Array(11)
-        .fill(null)
-        .map((_, col) => (
-          <Square
-            key={`square-${row}-${col}`}
-            color={customColors && customColors[row][col]}
-          >
-            {/* Render board elements */}
-          </Square>
-        ))
-    );
+  const boardLayout = Array(11).fill(null).map((_, row) =>
+    Array(11).fill(null).map((_, col) => {
+      return (
+        <Square
+          key={`square-${row}-${col}`}
+          color={customColors && customColors[row][col]}
+        >
+          {/* Render board elements */}
+        </Square>
+      );
+    })
+  );
 
   // Place tokens on the board
   players.forEach((player) => {
     player.tokens.forEach((token) => {
-      const { position } = token;
+      const { position, customToken } = token;
       if (position >= 0) {
         const [row, col] = getPositionCoordinates(position);
         boardLayout[row][col] = (
           <Token key={`token-${token.id}`} color={player.color}>
-            {token.id}
+            {customToken || token.id}
           </Token>
         );
       }
@@ -67,67 +81,67 @@ const Board = ({ players, customColors }) => {
 
   // Customize the center circle
   boardLayout[5][5] = (
-    <Square
+    <CenterCircle
       key="center-circle"
       color={customColors && customColors[5][5]}
     >
       {/* Customize center circle */}
-    </Square>
+    </CenterCircle>
   );
 
   // Customize the paths
   for (let i = 1; i <= 4; i++) {
     boardLayout[5][i] = (
-      <Square
+      <Path
         key={`path-5-${i}`}
         color={customColors && customColors[5][i]}
       >
         {/* Customize path */}
-      </Square>
+      </Path>
     );
     boardLayout[5 + i][5] = (
-      <Square
+      <Path
         key={`path-${5 + i}-5`}
         color={customColors && customColors[5 + i][5]}
       >
         {/* Customize path */}
-      </Square>
+      </Path>
     );
   }
 
   // Customize the winning zones
   // Add more winning zones as needed
   boardLayout[1][1] = (
-    <Square
+    <WinningZone
       key="winning-zone-1"
       color={customColors && customColors[1][1]}
     >
       {/* Customize winning zone */}
-    </Square>
+    </WinningZone>
   );
   boardLayout[9][1] = (
-    <Square
+    <WinningZone
       key="winning-zone-2"
       color={customColors && customColors[9][1]}
     >
       {/* Customize winning zone */}
-    </Square>
+    </WinningZone>
   );
   boardLayout[1][9] = (
-    <Square
+    <WinningZone
       key="winning-zone-3"
       color={customColors && customColors[1][9]}
     >
       {/* Customize winning zone */}
-    </Square>
+    </WinningZone>
   );
   boardLayout[9][9] = (
-    <Square
+    <WinningZone
       key="winning-zone-4"
       color={customColors && customColors[9][9]}
     >
       {/* Customize winning zone */}
-    </Square>
+    </WinningZone>
   );
 
   return <BoardContainer>{boardLayout.flat()}</BoardContainer>;
