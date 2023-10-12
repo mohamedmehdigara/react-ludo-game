@@ -2,14 +2,20 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Player from './components/Player';
-import Dice from './components/Dice'; // Import Dice component
-import Board from './components/Board'; // Import Board component
+import Dice from './components/Dice';
+import Board from './components/Board';
 
 const AppContainer = styled.div`
   /* Add your app styles here */
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const TurnIndicator = styled.div`
+  /* Add styles for the turn indicator here */
+  font-size: 24px;
+  margin-top: 20px;
 `;
 
 const App = () => {
@@ -54,6 +60,7 @@ const App = () => {
   return (
     <AppContainer>
       <h1>Ludo Game</h1>
+      <TurnIndicator>Current Turn: {players[currentPlayerIndex].name}</TurnIndicator>
       <div>
         <Dice value={diceValue} rollDice={rollDice} />
       </div>
