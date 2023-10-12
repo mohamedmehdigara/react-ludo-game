@@ -1,9 +1,7 @@
-// Board.js
 import React from 'react';
 import styled from 'styled-components';
 
 const BoardContainer = styled.div`
-  /* Add your board styles here */
   display: grid;
   grid-template-columns: repeat(11, 40px);
   grid-template-rows: repeat(11, 40px);
@@ -14,10 +12,9 @@ const BoardContainer = styled.div`
 `;
 
 const Square = styled.div`
-  /* Add your square styles here */
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  background-color: ${({ color }) => color || '#fff'};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,18 +22,7 @@ const Square = styled.div`
   font-size: 18px;
 `;
 
-const Path = styled(Square)`
-  /* Add path styles here */
-  background-color: #e0e0e0;
-`;
-
-const SafeZone = styled(Square)`
-  /* Add safe zone styles here */
-  background-color: #90ee90;
-`;
-
 const Token = styled.div`
-  /* Add token styles here */
   width: 80%;
   height: 80%;
   border-radius: 50%;
@@ -48,39 +34,23 @@ const Token = styled.div`
   font-size: 14px;
 `;
 
-const Board = ({ players }) => {
-  // Create the board layout
+const Board = ({ players, customColors }) => {
   const boardLayout = Array(11)
     .fill(null)
     .map((_, row) =>
       Array(11)
         .fill(null)
-        .map((_, col) => {
-          // Customize square rendering here (paths, safe zones, etc.)
-          return (
-            <Square key={`square-${row}-${col}`}>
-              {/* Render board elements */}
-            </Square>
-          );
-        })
+        .map((_, col) => (
+          <Square
+            key={`square-${row}-${col}`}
+            color={customColors && customColors[row][col]}
+          >
+            {/* Render board elements */}
+          </Square>
+        ))
     );
 
-  // Add game-specific paths and safe zones
-  for (let i = 1; i < 10; i++) {
-    boardLayout[i][0] = <Path key={`path-${i}-0`} />;
-    boardLayout[0][i] = <Path key={`path-0-${i}`} />;
-    boardLayout[10][i] = <Path key={`path-10-${i}`} />;
-    boardLayout[i][10] = <Path key={`path-${i}-10`} />;
-  }
-
-  for (let i = 4; i <= 7; i++) {
-    boardLayout[5][i] = <SafeZone key={`safe-zone-5-${i}`} />;
-    boardLayout[6][i] = <SafeZone key={`safe-zone-6-${i}`} />;
-    boardLayout[i][5] = <SafeZone key={`safe-zone-${i}-5`} />;
-    boardLayout[i][6] = <SafeZone key={`safe-zone-${i}-6`} />;
-  }
-
-  // Place player tokens on the board based on their positions
+  // Place tokens on the board
   players.forEach((player) => {
     player.tokens.forEach((token) => {
       const { position } = token;
@@ -95,12 +65,75 @@ const Board = ({ players }) => {
     });
   });
 
+  // Customize the center circle
+  boardLayout[5][5] = (
+    <Square
+      key="center-circle"
+      color={customColors && customColors[5][5]}
+    >
+      {/* Customize center circle */}
+    </Square>
+  );
+
+  // Customize the paths
+  for (let i = 1; i <= 4; i++) {
+    boardLayout[5][i] = (
+      <Square
+        key={`path-5-${i}`}
+        color={customColors && customColors[5][i]}
+      >
+        {/* Customize path */}
+      </Square>
+    );
+    boardLayout[5 + i][5] = (
+      <Square
+        key={`path-${5 + i}-5`}
+        color={customColors && customColors[5 + i][5]}
+      >
+        {/* Customize path */}
+      </Square>
+    );
+  }
+
+  // Customize the winning zones
+  // Add more winning zones as needed
+  boardLayout[1][1] = (
+    <Square
+      key="winning-zone-1"
+      color={customColors && customColors[1][1]}
+    >
+      {/* Customize winning zone */}
+    </Square>
+  );
+  boardLayout[9][1] = (
+    <Square
+      key="winning-zone-2"
+      color={customColors && customColors[9][1]}
+    >
+      {/* Customize winning zone */}
+    </Square>
+  );
+  boardLayout[1][9] = (
+    <Square
+      key="winning-zone-3"
+      color={customColors && customColors[1][9]}
+    >
+      {/* Customize winning zone */}
+    </Square>
+  );
+  boardLayout[9][9] = (
+    <Square
+      key="winning-zone-4"
+      color={customColors && customColors[9][9]}
+    >
+      {/* Customize winning zone */}
+    </Square>
+  );
+
   return <BoardContainer>{boardLayout.flat()}</BoardContainer>;
 };
 
-// Helper function to get row and column coordinates from the position
 const getPositionCoordinates = (position) => {
-  // Implement the logic to convert position to row and column
   const row = position % 11;
   const col = Math.floor(position / 11);
   return [row, col];

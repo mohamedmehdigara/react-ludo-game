@@ -1,10 +1,10 @@
-// Player.js
 import React from 'react';
 import styled from 'styled-components';
 import Token from './Token';
+import Dice from './Dice'; // Import the Dice component
 
 const PlayerContainer = styled.div`
-  /* Add your player container styles here */
+  /* Customize your player container styles here */
   border: ${({ currentPlayer }) => (currentPlayer ? '2px solid yellow' : '2px solid transparent')};
   padding: 20px;
   background-color: #f7f7f7;
@@ -14,23 +14,29 @@ const PlayerContainer = styled.div`
 `;
 
 const PlayerInfo = styled.div`
-  /* Add player information styles here */
+  /* Customize player information styles here */
   text-align: center;
   margin-bottom: 10px;
+  color: ${({ color }) => color};
 `;
 
 const PlayerTokens = styled.div`
-  /* Add player tokens container styles here */
+  /* Customize player tokens container styles here */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
 const Button = styled.button`
-  /* Add button styles here */
+  /* Customize button styles here */
   margin: 5px;
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: ${({ color }) => color};
   color: #fff;
   border: none;
   cursor: pointer;
@@ -43,7 +49,7 @@ const Player = ({ name, color, tokens, currentPlayer, rollDice, moveToken }) => 
 
   return (
     <PlayerContainer currentPlayer={currentPlayer}>
-      <PlayerInfo>
+      <PlayerInfo color={color}>
         <h2>{name}</h2>
         <p>Color: {color}</p>
       </PlayerInfo>
@@ -61,12 +67,23 @@ const Player = ({ name, color, tokens, currentPlayer, rollDice, moveToken }) => 
         </PlayerTokens>
       </div>
       <div>Remaining Tokens: {remainingTokens.length}</div>
-      {currentPlayer && (
-        <div>
-          <Button onClick={rollDice}>Roll Dice</Button>
-          <Button onClick={moveToken}>Move Token</Button>
-        </div>
-      )}
+      <ButtonContainer>
+        <Button color={color} onClick={rollDice}>
+          Roll Dice
+        </Button>
+        <Button
+          color={color}
+          onClick={moveToken}
+          disabled={remainingTokens.length === 0}
+        >
+          Move Token
+        </Button>
+      </ButtonContainer>
+      <Dice
+        value={1} // Replace with the actual dice value
+        isRolling={false} // Replace with the rolling state
+        rollDice={rollDice}
+      />
     </PlayerContainer>
   );
 };

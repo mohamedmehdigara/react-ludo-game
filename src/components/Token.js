@@ -1,9 +1,8 @@
-// Token.js
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
 const TokenContainer = styled.div`
-  /* Add your token styles here */
+  /* Customize your token styles here */
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -16,6 +15,8 @@ const TokenContainer = styled.div`
   cursor: ${({ isAnimated }) => (isAnimated ? 'not-allowed' : 'pointer')};
   user-select: none;
   animation: ${({ isAnimated }) => (isAnimated ? `${moveAnimation} 0.5s linear` : 'none')};
+  opacity: ${({ isAnimated }) => (isAnimated ? 0.7 : 1)};
+  transition: opacity 0.3s ease; /* Add a smooth opacity transition */
 `;
 
 const moveAnimation = keyframes`
@@ -32,7 +33,12 @@ const moveAnimation = keyframes`
 
 const Token = ({ position, playerColor, isAnimated, onClick }) => {
   return (
-    <TokenContainer backgroundColor={playerColor} isAnimated={isAnimated} onClick={isAnimated ? null : onClick}>
+    <TokenContainer
+      backgroundColor={playerColor}
+      isAnimated={isAnimated}
+      onClick={isAnimated ? null : onClick}
+      aria-label={`Token at position ${position}`} // Provide an accessible label
+    >
       {position}
     </TokenContainer>
   );
