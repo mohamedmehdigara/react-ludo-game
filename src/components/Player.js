@@ -4,9 +4,25 @@ import styled from 'styled-components';
 import Token from './Token';
 
 const PlayerContainer = styled.div`
-  /* Add your player styles here */
+  /* Add your player container styles here */
   border: ${({ currentPlayer }) => (currentPlayer ? '2px solid yellow' : '2px solid transparent')};
-  padding: 10px;
+  padding: 20px;
+  background-color: #f7f7f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const PlayerInfo = styled.div`
+  /* Add player information styles here */
+  text-align: center;
+`;
+
+const PlayerTokens = styled.div`
+  /* Add player tokens container styles here */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 `;
 
 const Player = ({ name, color, tokens, currentPlayer, rollDice, moveToken }) => {
@@ -14,17 +30,22 @@ const Player = ({ name, color, tokens, currentPlayer, rollDice, moveToken }) => 
 
   return (
     <PlayerContainer currentPlayer={currentPlayer}>
-      <h2>{name}</h2>
+      <PlayerInfo>
+        <h2>{name}</h2>
+        <p>Color: {color}</p>
+      </PlayerInfo>
       <div style={{ backgroundColor: color }}>
-        {remainingTokens.map((token) => (
-          <Token
-            key={token.id}
-            position={token.position}
-            playerId={token.playerId}
-            currentPlayer={currentPlayer}
-            onTokenMove={token.onTokenMove}
-          />
-        ))}
+        <PlayerTokens>
+          {remainingTokens.map((token) => (
+            <Token
+              key={token.id}
+              position={token.position}
+              playerId={token.playerId}
+              currentPlayer={currentPlayer}
+              onTokenMove={token.onTokenMove}
+            />
+          ))}
+        </PlayerTokens>
       </div>
       <div>Remaining Tokens: {remainingTokens.length}</div>
       {currentPlayer && (
@@ -38,3 +59,4 @@ const Player = ({ name, color, tokens, currentPlayer, rollDice, moveToken }) => 
 };
 
 export default Player;
+

@@ -1,15 +1,18 @@
 // App.js
-// App.js
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Player from './components/Player';
-import Token from './components/Token';
+import Dice from './components/Dice'; // Import Dice component
+import Board from './components/Board'; // Import Board component
 
 const AppContainer = styled.div`
   /* Add your app styles here */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
-const  App = () => {
+const App = () => {
   const [diceValue, setDiceValue] = useState(1);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
 
@@ -28,11 +31,9 @@ const  App = () => {
       tokens: [
         { id: 3, position: 0, playerId: 1 },
         { id: 4, position: 0, playerId: 1 },
-      
-    
-    
-  ]
-}]
+      ],
+    },
+  ];
 
   const rollDice = () => {
     const newValue = Math.floor(Math.random() * 6) + 1;
@@ -49,34 +50,29 @@ const  App = () => {
   const moveToken = () => {
     // Implement token movement logic based on the dice roll
   };
-  const Dice = ({ value }) => {
-    return (
-      <div>
-        <h2>Dice: {value}</h2>
-      </div>
-    );
-  };
-  
+
   return (
     <AppContainer>
       <h1>Ludo Game</h1>
-      {players.map((player, index) => (
-        <Player
-          key={index}
-          name={player.name}
-          color={player.color}
-          tokens={player.tokens}
-          currentPlayer={index === currentPlayerIndex}
-          rollDice={rollDice}
-          moveToken={moveToken}
-        />
-      ))}
       <div>
-        <Dice value={diceValue} />
+        <Dice value={diceValue} rollDice={rollDice} />
       </div>
+      <div style={{ display: 'flex' }}>
+        {players.map((player, index) => (
+          <Player
+            key={index}
+            name={player.name}
+            color={player.color}
+            tokens={player.tokens}
+            currentPlayer={index === currentPlayerIndex}
+            rollDice={rollDice}
+            moveToken={moveToken}
+          />
+        ))}
+      </div>
+      <Board players={players} /> {/* Render the game board with player positions */}
     </AppContainer>
   );
-      
+};
 
-}
 export default App;
