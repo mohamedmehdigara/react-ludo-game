@@ -1,6 +1,6 @@
 // Dice.js
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 const DiceContainer = styled.div`
   /* Add your dice container styles here */
@@ -29,9 +29,20 @@ const RollingDice = styled(DiceContainer)`
 `;
 
 const Dice = ({ value, isRolling, rollDice }) => {
+  const handleClick = () => {
+    if (!isRolling) {
+      // Disable rolling while the dice is already rolling
+      rollDice();
+    }
+  };
+
   return (
-    <DiceContainer onClick={rollDice} style={{ animationPlayState: isRolling ? 'running' : 'paused' }}>
-      {value}
+    <DiceContainer onClick={handleClick} isRolling={isRolling}>
+      {isRolling ? (
+        <RollingDice>{value}</RollingDice>
+      ) : (
+        value
+      )}
     </DiceContainer>
   );
 };

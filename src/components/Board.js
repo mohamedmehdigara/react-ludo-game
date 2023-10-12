@@ -41,12 +41,15 @@ const Token = styled.div`
   height: 80%;
   border-radius: 50%;
   background-color: ${({ color }) => color || '#000'};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
 `;
 
 const Board = ({ players }) => {
-  // You can create the board layout here with different squares, paths, and safe zones.
-
-  // Example: Create an 11x11 grid
+  // Create the board layout
   const boardLayout = Array(11)
     .fill(null)
     .map((_, row) =>
@@ -62,9 +65,22 @@ const Board = ({ players }) => {
         })
     );
 
-  // Place player tokens on the board based on their positions
+  // Add game-specific paths and safe zones
+  for (let i = 1; i < 10; i++) {
+    boardLayout[i][0] = <Path key={`path-${i}-0`} />;
+    boardLayout[0][i] = <Path key={`path-0-${i}`} />;
+    boardLayout[10][i] = <Path key={`path-10-${i}`} />;
+    boardLayout[i][10] = <Path key={`path-${i}-10`} />;
+  }
 
-  // Example: Place tokens for each player
+  for (let i = 4; i <= 7; i++) {
+    boardLayout[5][i] = <SafeZone key={`safe-zone-5-${i}`} />;
+    boardLayout[6][i] = <SafeZone key={`safe-zone-6-${i}`} />;
+    boardLayout[i][5] = <SafeZone key={`safe-zone-${i}-5`} />;
+    boardLayout[i][6] = <SafeZone key={`safe-zone-${i}-6`} />;
+  }
+
+  // Place player tokens on the board based on their positions
   players.forEach((player) => {
     player.tokens.forEach((token) => {
       const { position } = token;
@@ -85,8 +101,9 @@ const Board = ({ players }) => {
 // Helper function to get row and column coordinates from the position
 const getPositionCoordinates = (position) => {
   // Implement the logic to convert position to row and column
-  // Example: For a basic 11x11 board
-  return [position % 11, Math.floor(position / 11)];
+  const row = position % 11;
+  const col = Math.floor(position / 11);
+  return [row, col];
 };
 
 export default Board;

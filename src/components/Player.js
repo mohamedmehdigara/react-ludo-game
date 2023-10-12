@@ -16,6 +16,7 @@ const PlayerContainer = styled.div`
 const PlayerInfo = styled.div`
   /* Add player information styles here */
   text-align: center;
+  margin-bottom: 10px;
 `;
 
 const PlayerTokens = styled.div`
@@ -23,6 +24,18 @@ const PlayerTokens = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+`;
+
+const Button = styled.button`
+  /* Add button styles here */
+  margin: 5px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
 `;
 
 const Player = ({ name, color, tokens, currentPlayer, rollDice, moveToken }) => {
@@ -50,8 +63,8 @@ const Player = ({ name, color, tokens, currentPlayer, rollDice, moveToken }) => 
       <div>Remaining Tokens: {remainingTokens.length}</div>
       {currentPlayer && (
         <div>
-          <button onClick={rollDice}>Roll Dice</button>
-          <button onClick={moveToken}>Move Token</button>
+          <Button onClick={rollDice}>Roll Dice</Button>
+          <Button onClick={moveToken}>Move Token</Button>
         </div>
       )}
     </PlayerContainer>
@@ -59,4 +72,3 @@ const Player = ({ name, color, tokens, currentPlayer, rollDice, moveToken }) => 
 };
 
 export default Player;
-

@@ -13,8 +13,9 @@ const TokenContainer = styled.div`
   font-weight: bold;
   font-size: 16px;
   background-color: ${({ backgroundColor }) => backgroundColor || 'transparent'};
-  cursor: pointer;
+  cursor: ${({ isAnimated }) => (isAnimated ? 'not-allowed' : 'pointer')};
   user-select: none;
+  animation: ${({ isAnimated }) => (isAnimated ? `${moveAnimation} 0.5s linear` : 'none')};
 `;
 
 const moveAnimation = keyframes`
@@ -29,18 +30,9 @@ const moveAnimation = keyframes`
   }
 `;
 
-const AnimatedToken = styled(TokenContainer)`
-  /* Add token animation styles here */
-  animation: ${moveAnimation} 0.5s linear;
-`;
-
 const Token = ({ position, playerColor, isAnimated, onClick }) => {
   return (
-    <TokenContainer
-      backgroundColor={playerColor}
-      onClick={isAnimated ? null : onClick}
-      style={{ animation: isAnimated ? `${moveAnimation} 0.5s linear` : 'none' }}
-    >
+    <TokenContainer backgroundColor={playerColor} isAnimated={isAnimated} onClick={isAnimated ? null : onClick}>
       {position}
     </TokenContainer>
   );
