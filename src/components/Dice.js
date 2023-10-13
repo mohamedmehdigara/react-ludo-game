@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
+import PropTypes from 'prop-types';
 
 const DiceContainer = styled.div`
   /* Customize your dice container styles here */
@@ -27,6 +28,13 @@ const DiceContainer = styled.div`
     `}
 `;
 
+DiceContainer.propTypes = {
+  isRolling: PropTypes.bool,
+  backgroundColor: PropTypes.string,
+  borderColor: PropTypes.string,
+  // ... other propTypes
+};
+
 const rollAnimation = keyframes`
   0% { transform: rotate(0deg); }
   25% { transform: rotate(90deg); }
@@ -47,6 +55,8 @@ const DiceFace = styled.div`
 `;
 
 const DiceFaces = [
+  // You can create realistic dice face components or use images
+  // Example for a six-sided die:
   <DiceFace key="1">1</DiceFace>,
   <DiceFace key="2">2</DiceFace>,
   <DiceFace key="3">3</DiceFace>,
@@ -62,10 +72,10 @@ const Dice = ({ rollValue, isRolling, rollDice, backgroundColor, borderColor }) 
   useEffect(() => {
     if (isRolling) {
       // Simulate rolling by changing the displayed face
-      let currentFace = 1;
       const rollInterval = setInterval(() => {
-        setDisplayedFace(currentFace);
-        currentFace = (currentFace % 6) + 1;
+        // Generate a random face value for simulation
+        const randomFace = Math.floor(Math.random() * 6) + 1;
+        setDisplayedFace(randomFace);
       }, 100);
 
       // Stop rolling simulation after 1 second
@@ -101,6 +111,15 @@ const Dice = ({ rollValue, isRolling, rollDice, backgroundColor, borderColor }) 
       ))}
     </DiceContainer>
   );
+};
+
+Dice.propTypes = {
+  rollValue: PropTypes.number,
+  isRolling: PropTypes.bool,
+  rollDice: PropTypes.func,
+  backgroundColor: PropTypes.string,
+  borderColor: PropTypes.string,
+  // ... other propTypes
 };
 
 export default Dice;
