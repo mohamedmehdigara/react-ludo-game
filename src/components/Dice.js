@@ -17,7 +17,7 @@ const DiceContainer = styled.div`
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.1);
   }
 
   /* Apply the rolling animation if the dice is rolling */
@@ -32,7 +32,6 @@ DiceContainer.propTypes = {
   isRolling: PropTypes.bool,
   backgroundColor: PropTypes.string,
   borderColor: PropTypes.string,
-  // ... other propTypes
 };
 
 const rollAnimation = keyframes`
@@ -52,11 +51,11 @@ const DiceFace = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: bold;
+  font-size: 24px;
 `;
 
 const DiceFaces = [
-  // You can create realistic dice face components or use images
-  // Example for a six-sided die:
   <DiceFace key="1">1</DiceFace>,
   <DiceFace key="2">2</DiceFace>,
   <DiceFace key="3">3</DiceFace>,
@@ -66,24 +65,34 @@ const DiceFaces = [
 ];
 
 const Dice = ({ rollValue, isRolling, rollDice, backgroundColor, borderColor }) => {
-  // Use state to control the displayed face and simulate rolling animation
   const [displayedFace, setDisplayedFace] = useState(1);
 
   useEffect(() => {
     if (isRolling) {
-      // Simulate rolling by changing the displayed face
-      const rollInterval = setInterval(() => {
-        // Generate a random face value for simulation
-        const randomFace = Math.floor(Math.random() * 6) + 1;
-        setDisplayedFace(randomFace);
-      }, 100);
+      let countdown = 3;
 
-      // Stop rolling simulation after 1 second
-      setTimeout(() => {
-        clearInterval(rollInterval);
-        setDisplayedFace(rollValue);
-        rollDice();
-      }, 1000);
+      const countdownInterval = setInterval(() => {
+        // Countdown effect before revealing the final dice value
+        setDisplayedFace(countdown);
+        countdown--;
+
+        if (countdown === 0) {
+          clearInterval(countdownInterval);
+
+          // Simulate rolling by changing the displayed face
+          const rollInterval = setInterval(() => {
+            const randomFace = Math.floor(Math.random() * 6) + 1;
+            setDisplayedFace(randomFace);
+          }, 100);
+
+          // Stop rolling simulation after 1 second
+          setTimeout(() => {
+            clearInterval(rollInterval);
+            setDisplayedFace(rollValue);
+            rollDice();
+          }, 1000);
+        }
+      }, 500);
     }
   }, [isRolling, rollValue, rollDice]);
 
@@ -119,7 +128,6 @@ Dice.propTypes = {
   rollDice: PropTypes.func,
   backgroundColor: PropTypes.string,
   borderColor: PropTypes.string,
-  // ... other propTypes
 };
 
 export default Dice;

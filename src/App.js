@@ -5,15 +5,17 @@ import Player from './components/Player';
 import Dice from './components/Dice';
 import Board from './components/Board';
 
+const WinningPosition = 10; // You can adjust this value based on your game rules
+const SafeZoneStart = 3; // Adjust this value based on your game rules
+const SafeZoneEnd = 7; // Adjust this value based on your game rules
+
 const AppContainer = styled.div`
-  /* Add your app styles here */
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
 const TurnIndicator = styled.div`
-  /* Add styles for the turn indicator here */
   font-size: 24px;
   margin-top: 20px;
 `;
@@ -48,13 +50,17 @@ const App = () => {
     // Implement token movement logic and game rules here
     // Update token positions and check for win conditions
 
-    // Switch to the next player's turn
-    const nextPlayerIndex = (currentPlayerIndex + 1) % players.length;
-    setCurrentPlayerIndex(nextPlayerIndex);
+    // Allow the player to roll again if they get a six
+    if (newValue !== 6) {
+      // Switch to the next player's turn
+      const nextPlayerIndex = (currentPlayerIndex + 1) % players.length;
+      setCurrentPlayerIndex(nextPlayerIndex);
+    }
   };
 
   const moveToken = () => {
     // Implement token movement logic based on the dice roll
+    // Check for safe zones and other game rules
   };
 
   return (
@@ -74,6 +80,8 @@ const App = () => {
             currentPlayer={index === currentPlayerIndex}
             rollDice={rollDice}
             moveToken={moveToken}
+            safeZoneStart={SafeZoneStart}
+            safeZoneEnd={SafeZoneEnd}
           />
         ))}
       </div>

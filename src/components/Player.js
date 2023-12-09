@@ -43,7 +43,7 @@ const Button = styled.button`
   border-radius: 5px;
 `;
 
-const Player = ({ name, color, tokens, currentPlayer, rollDice, moveToken }) => {
+const Player = ({ name, color, tokens, currentPlayer, rollDice, moveToken, rolledValue }) => {
   const remainingTokens = tokens.filter((token) => token.position !== -1);
 
   return (
@@ -51,6 +51,7 @@ const Player = ({ name, color, tokens, currentPlayer, rollDice, moveToken }) => 
       <PlayerInfo>
         <h2>{name}</h2>
         <p>Color: {color}</p>
+        {currentPlayer && <p>Rolled Dice: {rolledValue}</p>}
       </PlayerInfo>
       <div style={{ backgroundColor: color }}>
         <PlayerTokens>
@@ -83,6 +84,7 @@ Player.propTypes = {
   currentPlayer: PropTypes.bool,
   rollDice: PropTypes.func,
   moveToken: PropTypes.func,
+  rolledValue: PropTypes.number,
   // ... other propTypes
 };
 

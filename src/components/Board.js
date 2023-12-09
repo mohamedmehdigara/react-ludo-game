@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const BoardContainer = styled.div`
@@ -20,6 +20,7 @@ const Square = styled.div`
   justify-content: center;
   font-weight: bold;
   font-size: 18px;
+  cursor: pointer;
 `;
 
 const Token = styled.div`
@@ -51,12 +52,22 @@ const WinningZone = styled(Square)`
 `;
 
 const Board = ({ players, customColors }) => {
+  const [currentPlayer, setCurrentPlayer] = useState(0); // Index of the current player
+
+  const handleCellClick = (row, col) => {
+    // Handle cell click logic, e.g., placing a token
+    console.log(`Cell clicked: Row ${row}, Column ${col}`);
+  };
+
   const boardLayout = Array(11).fill(null).map((_, row) =>
     Array(11).fill(null).map((_, col) => {
+      const isClickable = true; // Customize based on your logic
+      const positionColor = customColors && customColors[row][col];
       return (
         <Square
           key={`square-${row}-${col}`}
-          color={customColors && customColors[row][col]}
+          color={positionColor}
+          onClick={() => isClickable && handleCellClick(row, col)}
         >
           {/* Render board elements */}
         </Square>
@@ -144,7 +155,14 @@ const Board = ({ players, customColors }) => {
     </WinningZone>
   );
 
-  return <BoardContainer>{boardLayout.flat()}</BoardContainer>;
+  return (
+    <div>
+      <div>
+        Current Turn: Player {currentPlayer + 1}
+      </div>
+      <BoardContainer>{boardLayout.flat()}</BoardContainer>
+    </div>
+  );
 };
 
 const getPositionCoordinates = (position) => {

@@ -39,7 +39,7 @@ const Token = ({ position, playerColor, isAnimated, onClick }) => {
       onClick={isAnimated ? null : onClick}
       aria-label={`Token at position ${position}`} // Provide an accessible label
     >
-      {position}
+      {position >= 0 ? position + 1 : ''}
     </TokenContainer>
   );
 };
