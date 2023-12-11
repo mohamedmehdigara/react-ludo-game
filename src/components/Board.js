@@ -36,18 +36,15 @@ const Token = styled.div`
 `;
 
 const CenterCircle = styled(Square)`
-  /* Customize center circle styles here */
   background-color: #ccc;
   border-radius: 50%;
 `;
 
 const Path = styled(Square)`
-  /* Customize path styles here */
   background-color: #e0e0e0;
 `;
 
 const WinningZone = styled(Square)`
-  /* Customize winning zone styles here */
   background-color: #ffeb3b;
 `;
 
